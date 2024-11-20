@@ -1,5 +1,6 @@
 import os
 from enum import Enum
+from datetime import datetime
 from license_generator import LicenseGenerator
 
 class CommentStyle(Enum):
@@ -35,6 +36,12 @@ class FileType(Enum):
         self.extension = extension
         self.comment_style = comment_style
 
+class LicenseKeyword(Enum):
+    """ Enum to store common keywords in license text """
+    COPYRIGHT = "Copyright"
+    LICENSE = "License"
+    YEAR = str(datetime.now().year)  # Get the current year dynamically
+
 class LicenseManager:
     def __init__(self, license_text: str):
         """
@@ -53,11 +60,11 @@ class LicenseManager:
             print(f"Error: The file {file_path} does not exist.")
             return
 
-        # Check if the file already contains the license
+        # Check if the file already contains the license in the beginning (can be more sophisticated)
         with open(file_path, 'r') as file:
             content = file.read()
 
-            if self.license_text in content:
+            if self.is_license_present(content):
                 print(f"License already exists in {file_path}. No changes made.")
                 return
 
@@ -84,6 +91,20 @@ class LicenseManager:
             file.write(license_with_comment + "\n" + original_content)
 
         print(f"License added successfully to {file_path}.")
+
+    def is_license_present(self, content: str) -> bool:
+        """
+        Check if the content already contains a license at the beginning of the file.
+        :param content: The content of the file
+        :return: True if the license is found, otherwise False
+        """
+        # Normalize the content: remove leading/trailing spaces, line breaks, etc.
+        content = content.strip()
+
+        # Check if any of the license-related keywords exist in the first few lines of the content
+        if any(keyword.value in content for keyword in LicenseKeyword):
+            return True
+        return False
 
     def get_file_type(self, file_extension: str) -> FileType:
         """Returns the appropriate FileType enum based on the file extension."""
@@ -128,7 +149,7 @@ if __name__ == "__main__":
         license_file="data/license.json",  # Assume license.json is located in the data folder
         license_type="MIT License",
         start_year=2015,
-        end_year=2024,
+        end_year=datetime.now().year,  # Use current year dynamically
         author="Microsoft Corporation"
     )
 
