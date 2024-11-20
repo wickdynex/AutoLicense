@@ -1,5 +1,6 @@
 import argparse
 import sys
+import os
 from datetime import datetime
 
 class LicenseArgConfig:
@@ -70,6 +71,10 @@ class LicenseArgConfig:
         # Check if end year is in the future
         if args.end_year is not None and args.end_year > current_year:
             self._handle_error(f"End year {args.end_year} cannot be in the future. Current year is {current_year}.")
+
+        # Check if target folder exists
+        if not os.path.isdir(args.target_folder):
+            self._handle_error(f"Error: Target folder '{args.target_folder}' does not exist.")
 
     def _handle_error(self, message: str):
         """
