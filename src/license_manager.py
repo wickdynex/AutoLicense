@@ -99,11 +99,12 @@ class LicenseManager:
         :return: True if the license is found, otherwise False
         """
         # Normalize the content: remove leading/trailing spaces, line breaks, etc.
-        content = content.strip()
+        content = content.strip().lower()  # Convert content to lowercase
 
-        # Check if any of the license-related keywords exist in the first few lines of the content
-        if any(keyword.value in content for keyword in LicenseKeyword):
-            return True
+        # Check if any of the license-related keywords exist in the content
+        for keyword in LicenseKeyword:
+            if keyword.value.lower() in content:  # Compare using lowercase
+                return True
         return False
 
     def get_file_type(self, file_extension: str) -> FileType:
