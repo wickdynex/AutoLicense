@@ -1,22 +1,23 @@
 import argparse
 import sys
+from datetime import datetime
 
 class LicenseArgConfig:
     def __init__(self):
         """
-        Initialize the LicenseArgConfig class, responsible for parsing command-line arguments.
+        Initialize LicenseArgConfig class for parsing command-line arguments.
         """
         self.license_file = None
         self.license_type = None
         self.start_year = None
-        self.author = None
         self.end_year = None
+        self.author = None
         self.target_folder = None
 
     def parse(self):
         """
-        Parse command-line arguments using argparse and provide error messages and help information.
-        :return: Parsed arguments
+        Use argparse to parse command-line arguments, and validate their correctness.
+        :return: Validated arguments
         """
         parser = argparse.ArgumentParser(
             description="Generate a license file with the specified parameters."
@@ -37,26 +38,51 @@ class LicenseArgConfig:
         try:
             # Parse command-line arguments
             args = parser.parse_args()
-            
-            # Assign parsed arguments to class attributes
+
+            # Validate parameters
+            self._validate_args(args)
+
+            # Assign parsed arguments to instance variables
             self.license_file = args.license_file
             self.license_type = args.license_type
             self.start_year = args.start_year
             self.author = args.author
             self.end_year = args.end_year
             self.target_folder = args.target_folder
+
         except argparse.ArgumentError as e:
-            print(f"Error: {e}")
-            parser.print_help()
-            sys.exit(1)
+            self._handle_error(f"Argument Error: {e}")
         except Exception as e:
-            print(f"Unexpected error: {e}")
-            sys.exit(1)
+            self._handle_error(f"Unexpected error: {e}")
+
+    def _validate_args(self, args):
+        """
+        Validate the parsed arguments to ensure their correctness.
+        :param args: Parsed arguments
+        """
+        # Get the current year dynamically
+        current_year = datetime.now().year
+
+        # Check if start year is less than or equal to end year
+        if args.end_year is not None and args.start_year > args.end_year:
+            self._handle_error(f"Start year {args.start_year} cannot be greater than end year {args.end_year}.")
+
+        # Check if end year is in the future
+        if args.end_year is not None and args.end_year > current_year:
+            self._handle_error(f"End year {args.end_year} cannot be in the future. Current year is {current_year}.")
+
+    def _handle_error(self, message: str):
+        """
+        Prints the error message and exits the program.
+        :param message: The error message to display
+        """
+        print(f"Error: {message}")
+        sys.exit(1)
 
     def display_info(self):
-        """Display parsed command-line arguments in the specified order."""
-        print(f"License type: {self.license_type}")
+        """Display the parsed command-line arguments in the specified order."""
         print(f"License file: {self.license_file}")
+        print(f"License type: {self.license_type}")
         print(f"Start year: {self.start_year}")
         print(f"End year: {self.end_year if self.end_year else 'N/A'}")
         print(f"Author: {self.author}")
