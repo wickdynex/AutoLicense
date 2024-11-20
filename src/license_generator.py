@@ -72,21 +72,21 @@ class LicenseGenerator:
 # Main section where LicenseGenerator is used
 if __name__ == "__main__":
     license_generator_mit = LicenseGenerator(
-        license_file="license.json", license_type="MIT License", start_year=2015, end_year=2024, author="Microsoft Corporation"
+        license_file="data/license.json", license_type="MIT License", start_year=2015, end_year=2024, author="Microsoft Corporation"
     )
     license_text_mit = license_generator_mit.generate_license()
     print("MIT License:\n")
     print(license_text_mit)
 
     license_generator_apache = LicenseGenerator(
-        license_file="license.json", license_type="Apache License 2.0", start_year=2015, end_year=None, author="Microsoft Corporation"
+        license_file="data/license.json", license_type="Apache License 2.0", start_year=2015, end_year=None, author="Microsoft Corporation"
     )
     license_text_apache = license_generator_apache.generate_license()
     print("\nApache License 2.0:\n")
     print(license_text_apache)
 
     license_generator_apache = LicenseGenerator(
-        license_file="license.json", license_type="Apache License 2.0", start_year=None, end_year=None, author="Microsoft Corporation"
+        license_file="data/license.json", license_type="Apache License 2.0", start_year=None, end_year=None, author="Microsoft Corporation"
     )
     license_text_apache = license_generator_apache.generate_license()
     print("\nApache License 2.0:\n")
