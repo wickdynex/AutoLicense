@@ -21,40 +21,36 @@ class LicenseArgConfig:
         :return: Validated arguments
         """
         parser = argparse.ArgumentParser(
-            description="Generate a license file with the specified parameters."
+            description="Apply copyright information to all files in the specified target folder."
         )
         
         # Required arguments
         parser.add_argument("--license-file", required=True, help="Path to the license file")
         parser.add_argument("--license-type", required=True, help="Type of the license (e.g., MIT License)")
         parser.add_argument("--start-year", type=int, required=True, help="Start year of the license")
-        parser.add_argument("--author", required=True, help="Author of the license")
         
         # Optional argument
         parser.add_argument("--end-year", type=int, help="End year of the license (optional)")
         
+        # Required arguments
+        parser.add_argument("--author", required=True, help="Author of the license")
+
         # Target folder argument
-        parser.add_argument("--target-folder", required=True, help="Target folder to save the generated file")
+        parser.add_argument("--target-folder", required=True, help="Target folder containing files to which copyright will be applied")
         
-        try:
-            # Parse command-line arguments
-            args = parser.parse_args()
+        # Parse command-line arguments
+        args = parser.parse_args()
 
-            # Validate parameters
-            self._validate_args(args)
+        # validate parameters
+        self._validate_args(args)
 
-            # Assign parsed arguments to instance variables
-            self.license_file = args.license_file
-            self.license_type = args.license_type
-            self.start_year = args.start_year
-            self.author = args.author
-            self.end_year = args.end_year
-            self.target_folder = args.target_folder
-
-        except argparse.ArgumentError as e:
-            self._handle_error(f"Argument Error: {e}")
-        except Exception as e:
-            self._handle_error(f"Unexpected error: {e}")
+        # assign parsed arguments to instance variables
+        self.license_file = args.license_file
+        self.license_type = args.license_type
+        self.start_year = args.start_year
+        self.author = args.author
+        self.end_year = args.end_year
+        self.target_folder = args.target_folder
 
     def _validate_args(self, args):
         """
@@ -74,7 +70,7 @@ class LicenseArgConfig:
 
         # Check if target folder exists
         if not os.path.isdir(args.target_folder):
-            self._handle_error(f"Error: Target folder '{args.target_folder}' does not exist.")
+            self._handle_error(f"Target folder '{args.target_folder}' does not exist.")
 
     def _handle_error(self, message: str):
         """
