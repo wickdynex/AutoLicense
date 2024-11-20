@@ -1,5 +1,39 @@
 import os
+from enum import Enum
 from license_generator import LicenseGenerator
+
+class CommentStyle(Enum):
+    """ Enum to map file extensions to their respective comment styles. """
+    SINGLE_LINE = "# "  # For single-line comments
+    MULTI_LINE = "/* "  # For multi-line comments (start with /*, end with */)
+    XML_HTML = "<!-- "  # For HTML/XML comments (start with <!--, end with -->)
+
+class FileType(Enum):
+    """ Enum to map file extensions to their respective comment styles. """
+    PYTHON = ('.py', CommentStyle.SINGLE_LINE)
+    SHELL = ('.sh', CommentStyle.SINGLE_LINE)
+    TEXT = ('.txt', CommentStyle.SINGLE_LINE)
+    RUBY = ('.rb', CommentStyle.SINGLE_LINE)
+    PERL = ('.pl', CommentStyle.SINGLE_LINE)
+    LUA = ('.lua', CommentStyle.SINGLE_LINE)
+    BASH = ('.bash', CommentStyle.SINGLE_LINE)
+    ZSH = ('.zsh', CommentStyle.SINGLE_LINE)
+    R = ('.r', CommentStyle.SINGLE_LINE)
+    TOML = ('.toml', CommentStyle.SINGLE_LINE)
+    YAML = ('.yml', CommentStyle.SINGLE_LINE)
+    JAVA = ('.java', CommentStyle.MULTI_LINE)
+    CPP = ('.cpp', CommentStyle.MULTI_LINE)
+    C = ('.c', CommentStyle.MULTI_LINE)
+    HEADER = ('.h', CommentStyle.MULTI_LINE)
+    JAVASCRIPT = ('.js', CommentStyle.MULTI_LINE)
+    CSS = ('.css', CommentStyle.MULTI_LINE)
+    HTML = ('.html', CommentStyle.XML_HTML)
+    XML = ('.xml', CommentStyle.XML_HTML)
+    MD = ('.md', CommentStyle.XML_HTML)
+    
+    def __init__(self, extension, comment_style):
+        self.extension = extension
+        self.comment_style = comment_style
 
 class LicenseManager:
     def __init__(self, license_text: str):
@@ -30,19 +64,15 @@ class LicenseManager:
         # Determine the comment style based on the file extension
         file_extension = os.path.splitext(file_path)[1]
 
-        # Files that use `#` for comments (Single-line comments)
-        if file_extension in ['.py', '.sh', '.txt', '.rb', '.pl', '.lua', '.bash', '.zsh', '.r', '.yml']:  
-            comment_style = '# '
-        # Files that use `/* ... */` for comments (Multi-line comments)
-        elif file_extension in ['.java', '.cpp', '.h', '.js', '.css', '.m', '.swift', '.ts', '.go', '.c']:  
-            comment_style = '/* '
-        # Files that use `<!-- -->` for line comments (like XML, HTML)
-        elif file_extension in ['.xml', '.html', '.xhtml', '.md']:
-            comment_style = '<!-- '
-        else:
-            # If the file type is unsupported, print a warning
+        # Find the matching file type based on extension
+        file_type = self.get_file_type(file_extension)
+        
+        if not file_type:
             print(f"Warning: File type {file_extension} not recognized, skipping...")
             return
+
+        # Get the comment style associated with this file type
+        comment_style = file_type.comment_style.value
 
         # Format the license text with the correct comment style
         license_with_comment = self.format_license_with_comments(comment_style)
@@ -55,6 +85,13 @@ class LicenseManager:
 
         print(f"License added successfully to {file_path}.")
 
+    def get_file_type(self, file_extension: str) -> FileType:
+        """Returns the appropriate FileType enum based on the file extension."""
+        for file_type in FileType:
+            if file_extension == file_type.extension:
+                return file_type
+        return None
+
     def format_license_with_comments(self, comment_style: str) -> str:
         """
         Format the license text with the appropriate comment style
@@ -64,17 +101,17 @@ class LicenseManager:
         lines = self.license_text.split("\n")
         formatted_lines = []
 
-        if comment_style == '# ':
+        if comment_style == CommentStyle.SINGLE_LINE.value:
             # Single-line comment style: start each line with `# `
             full_license = "\n".join([f"{comment_style}{line}" for line in lines])
-        elif comment_style == '/* ':
+        elif comment_style == CommentStyle.MULTI_LINE.value:
             # Multi-line comment style: start with `/*` and end with `*/`
             formatted_lines.append("/*")
             for line in lines:
                 formatted_lines.append(f" * {line}")
             formatted_lines.append(" */")
             full_license = "\n".join(formatted_lines)
-        elif comment_style == '<!-- ':
+        elif comment_style == CommentStyle.XML_HTML.value:
             # Line comment style for HTML/XML: use `<!--` and `-->`
             formatted_lines.append("<!--")
             for line in lines:
