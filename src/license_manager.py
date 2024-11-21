@@ -54,7 +54,7 @@ class LicenseManager:
 
     def check_and_add_license(self, file_path: str):
         """
-        Check if the file already contains a license. If not, add the license.
+        Check if the file extension is supported, then check if it already contains a license. If not, add the license.
         :param file_path: The path to the file where the license should be added
         """
         # Check if the file exists
@@ -62,23 +62,21 @@ class LicenseManager:
             print(f"Error: The file {file_path} does not exist.")
             return
 
-        # Check if the file already contains the license in the beginning (can be more sophisticated)
+        # Check if the file extension is valid (matches one of the defined file types)
+        file_extension = os.path.splitext(file_path)[1]
+        file_type = self.get_file_type(file_extension)
+        
+        if not file_type:
+            self.print_log(f"Warning: File type {file_extension} not recognized, skipping...")
+            return
+        
+        # Check if the file already contains the license in the beginning
         with open(file_path, 'r') as file:
             content = file.read()
 
             if self.is_license_present(content):
                 self.print_log(f"License already exists in {file_path}. No changes made.")
                 return
-
-        # Determine the comment style based on the file extension
-        file_extension = os.path.splitext(file_path)[1]
-
-        # Find the matching file type based on extension
-        file_type = self.get_file_type(file_extension)
-        
-        if not file_type:
-            self.print_log(f"Warning: File type {file_extension} not recognized, skipping...")
-            return
 
         # Get the comment style associated with this file type
         comment_style = file_type.comment_style.value
