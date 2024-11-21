@@ -121,8 +121,8 @@ class LicenseManager:
         # Split the content into lines
         lines = content.splitlines()
 
-        # Only consider the first 50 lines
-        lines_to_check = lines[:50]
+        # Only consider the first 30 lines
+        lines_to_check = lines[:30]
 
         # Initialize a flag to check if we are inside a comment block
         inside_comment_block = False
