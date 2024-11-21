@@ -67,7 +67,7 @@ class LicenseManager:
         file_type = self.get_file_type(file_extension)
         
         if not file_type:
-            self.print_log(f"Warning: File type {file_extension} not recognized, skipping...")
+            self.print_log(f"Warning: File {file_path} with type {file_extension} not recognized, skipping...")
             return
         
         # Check if the file already contains the license in the beginning
@@ -94,17 +94,26 @@ class LicenseManager:
 
     def is_license_present(self, content: str) -> bool:
         """
-        Check if the content already contains a license at the beginning of the file.
-        :param content: The content of the file
-        :return: True if the license is found, otherwise False
+        Check if the content of the first 50 lines contains an exact license-related keyword.
+        :param content: The content of the file as a string
+        :return: True if any license-related keyword is found exactly (case-sensitive) in the first 50 lines, otherwise False
         """
-        # Normalize the content: remove leading/trailing spaces, line breaks, etc.
-        content = content.strip().lower()  # Convert content to lowercase
+        # Split content into lines
+        lines = content.splitlines()
 
-        # Check if any of the license-related keywords exist in the content
-        for keyword in LicenseKeyword:
-            if keyword.value.lower() in content:  # Compare using lowercase
-                return True
+        # Only consider the first 50 lines
+        lines_to_check = lines[:50]
+
+        # Iterate through the first 50 lines
+        for line in lines_to_check:
+            # Normalize the line by stripping leading/trailing spaces
+            line = line.strip()
+
+            # Check if any of the license-related keywords (exact match, case-sensitive) is found in this line
+            for keyword in LicenseKeyword:
+                if keyword.value in line:  # Strictly check for exact keyword match (case-sensitive)
+                    return True
+
         return False
 
     def get_file_type(self, file_extension: str) -> FileType:
