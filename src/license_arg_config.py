@@ -14,6 +14,7 @@ class LicenseArgConfig:
         self.end_year = None
         self.author = None
         self.target_folder = None
+        self.detail = False  
 
     def parse(self):
         """
@@ -37,14 +38,20 @@ class LicenseArgConfig:
 
         # Target folder argument
         parser.add_argument("--target-folder", required=True, help="Target folder containing files to which copyright will be applied")
-        
+
+        # Optional argument
+        parser.add_argument("--detail", action='store_true', help="Show details on whether the license has been added to the files")
+
         # Parse command-line arguments
         args = parser.parse_args()
 
-        # validate parameters
+        # Set the detail flag
+        self.detail = args.detail
+
+        # Validate parameters
         self._validate_args(args)
 
-        # assign parsed arguments to instance variables
+        # Assign parsed arguments to instance variables
         self.license_file = args.license_file
         self.license_type = args.license_type
         self.start_year = args.start_year
@@ -88,7 +95,7 @@ class LicenseArgConfig:
         print(f"End year: {self.end_year if self.end_year else 'N/A'}")
         print(f"Author: {self.author}")
         print(f"Target folder: {self.target_folder}")
-
+        print(f"Show details: {self.detail}")
 
 def main():
     # Create LicenseArgConfig instance
