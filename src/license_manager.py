@@ -43,12 +43,14 @@ class LicenseKeyword(Enum):
     YEAR = str(datetime.now().year)  # Get the current year dynamically
 
 class LicenseManager:
-    def __init__(self, license_text: str):
+    def __init__(self, license_text: str, detail: bool = False):
         """
         Initialize the LicenseManager instance
         :param license_text: The license text to be added to the file
+        :param detail: A flag to control whether detailed logs should be printed
         """
         self.license_text = license_text
+        self.detail = detail  
 
     def check_and_add_license(self, file_path: str):
         """
@@ -57,7 +59,7 @@ class LicenseManager:
         """
         # Check if the file exists
         if not os.path.exists(file_path):
-            print(f"Error: The file {file_path} does not exist.")
+            self.print_log(f"Error: The file {file_path} does not exist.")
             return
 
         # Check if the file already contains the license in the beginning (can be more sophisticated)
@@ -65,7 +67,7 @@ class LicenseManager:
             content = file.read()
 
             if self.is_license_present(content):
-                print(f"License already exists in {file_path}. No changes made.")
+                self.print_log(f"License already exists in {file_path}. No changes made.")
                 return
 
         # Determine the comment style based on the file extension
@@ -75,7 +77,7 @@ class LicenseManager:
         file_type = self.get_file_type(file_extension)
         
         if not file_type:
-            print(f"Warning: File type {file_extension} not recognized, skipping...")
+            self.print_log(f"Warning: File type {file_extension} not recognized, skipping...")
             return
 
         # Get the comment style associated with this file type
@@ -90,7 +92,7 @@ class LicenseManager:
             file.seek(0, 0)  # Move the file pointer to the beginning
             file.write(license_with_comment + "\n" + original_content)
 
-        print(f"License added successfully to {file_path}.")
+        self.print_log(f"License added successfully to {file_path}.")
 
     def is_license_present(self, content: str) -> bool:
         """
@@ -117,24 +119,24 @@ class LicenseManager:
     def format_license_with_comments(self, comment_style: str) -> str:
         """
         Format the license text with the appropriate comment style
-        :param comment_style: The comment style, either `# `, `/* */`, or `<!-- -->`
+        :param comment_style: The comment style, either '#' , '/* */', or '<!-- -->'
         :return: The formatted license text
         """
         lines = self.license_text.split("\n")
         formatted_lines = []
 
         if comment_style == CommentStyle.SINGLE_LINE.value:
-            # Single-line comment style: start each line with `# `
+            # Single-line comment style: start each line with '#' 
             full_license = "\n".join([f"{comment_style}{line}" for line in lines])
         elif comment_style == CommentStyle.MULTI_LINE.value:
-            # Multi-line comment style: start with `/*` and end with `*/`
+            # Multi-line comment style: start with '/*' and end with '*/'
             formatted_lines.append("/*")
             for line in lines:
                 formatted_lines.append(f" * {line}")
             formatted_lines.append(" */")
             full_license = "\n".join(formatted_lines)
         elif comment_style == CommentStyle.XML_HTML.value:
-            # Line comment style for HTML/XML: use `<!--` and `-->`
+            # Line comment style for HTML/XML: use '<!--' and '-->'
             formatted_lines.append("<!--")
             for line in lines:
                 formatted_lines.append(f" {line}")
@@ -142,6 +144,12 @@ class LicenseManager:
             full_license = "\n".join(formatted_lines)
         
         return full_license
+
+    def print_log(self, message: str):
+        """ Prints the log message only if the detail flag is set to True """
+        if self.detail:
+            print(f"[INFO] {message}")
+
 
 # Main function to test LicenseManager and LicenseGenerator
 if __name__ == "__main__":
@@ -157,8 +165,8 @@ if __name__ == "__main__":
     # Generate the license text
     license_text = license_generator.generate_license()
 
-    # Create a LicenseManager instance with the generated license text
-    license_manager = LicenseManager(license_text)
+    # Create a LicenseManager instance with the generated license text and detail flag set to True
+    license_manager = LicenseManager(license_text, detail=True)
 
     # Test with various file paths in /test/testfile/
     file_paths = [
@@ -181,6 +189,12 @@ if __name__ == "__main__":
     ]
 
     # Iterate through each file and add the license
+    for file_path in file_paths:
+        print(f"\nChecking and adding license to {file_path}...")
+        license_manager.check_and_add_license(file_path)
+
+    license_manager.detail = False
+
     for file_path in file_paths:
         print(f"\nChecking and adding license to {file_path}...")
         license_manager.check_and_add_license(file_path)
