@@ -1,6 +1,6 @@
 import argparse
-import sys
 import os
+import sys
 from datetime import datetime
 
 class LicenseArgConfig:
@@ -57,7 +57,7 @@ class LicenseArgConfig:
         self.start_year = args.start_year
         self.author = args.author
         self.end_year = args.end_year
-        self.target_folder = args.target_folder
+        self.target_folder = os.path.abspath(args.target_folder)  # Ensure we use an absolute path
 
     def _validate_args(self, args):
         """
@@ -78,6 +78,10 @@ class LicenseArgConfig:
         # Check if target folder exists
         if not os.path.isdir(args.target_folder):
             self._handle_error(f"Target folder '{args.target_folder}' does not exist.")
+        
+        # Check if the target folder is writable
+        if not os.access(args.target_folder, os.W_OK):
+            self._handle_error(f"Target folder '{args.target_folder}' is not writable. Please ensure you have write permissions.")
 
     def _handle_error(self, message: str):
         """
