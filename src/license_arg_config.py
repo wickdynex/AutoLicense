@@ -70,7 +70,8 @@ class LicenseArgConfig:
         self.start_year = args.start_year
         self.author = args.author
         self.end_year = args.end_year
-        self.target_folder = os.path.abspath(args.target_folder)  # Ensure we use an absolute path
+        # self.target_folder = os.path.abspath(args.target_folder)  # Ensure we use an absolute path
+        self.target_folder = args.target_folder
 
     def _validate_args(self, args):
         """
