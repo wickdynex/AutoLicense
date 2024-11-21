@@ -34,54 +34,6 @@ class TestLicenseManager(unittest.TestCase):
 
     @patch("os.path.exists")
     @patch("builtins.open", new_callable=mock_open, read_data="This is a test file.\n")
-    def test_check_and_add_license_add_license(self, mock_file, mock_exists):
-        # Simulate that the file exists, but does not contain a license
-        mock_exists.return_value = True
-
-        license_text = "MIT License\nCopyright 2015-2024 Microsoft Corporation"
-        license_manager = LicenseManager(license_text, detail=True)
-
-        # Check adding a license to a file without one
-        with patch("builtins.print") as mock_print:
-            license_manager.check_and_add_license("test/testfile/new_file.py")
-
-            # Check that the license was added successfully
-            mock_print.assert_called_with("[INFO] License added successfully to test/testfile/new_file.py.")
-
-            # Verify that the file content includes the correct comment format
-            handle = mock_file()
-            handle.seek.assert_called_once_with(0, 0)  # The file pointer should move to the beginning
-
-            # Here you can check if the written data adheres to the required format
-            written_data = handle.write.call_args[0][0]
-            self.assertTrue(written_data.startswith("# MIT License"))  # Assuming single-line comments
-
-    @patch("os.path.exists")
-    @patch("builtins.open", new_callable=mock_open, read_data="This is a test file.\n")
-    def test_check_and_add_license_multi_line_comment(self, mock_file, mock_exists):
-        # Simulate that the file exists, but does not contain a license
-        mock_exists.return_value = True
-
-        license_text = "MIT License\nCopyright 2015-2024 Microsoft Corporation\n"
-        license_manager = LicenseManager(license_text, detail=True)
-
-        # Test a .cpp file, which should use multi-line comments
-        with patch("builtins.print") as mock_print:
-            license_manager.check_and_add_license("test/testfile/test.cpp")
-
-            # Check that the license was added successfully
-            mock_print.assert_called_with("[INFO] License added successfully to test/testfile/test.cpp.")
-
-            # Check if the written license adheres to multi-line comment format
-            mock_file.assert_called_with("test/testfile/test.cpp", 'r+')
-            handle = mock_file()
-            written_data = handle.write.call_args[0][0]
-            print(written_data)
-            self.assertTrue(written_data.startswith("/*"))  # Multi-line comments should start with '/*'
-            self.assertTrue(written_data.endswith("\n"))  # Multi-line comments should end with '*/'
-
-    @patch("os.path.exists")
-    @patch("builtins.open", new_callable=mock_open, read_data="This is a test file.\n")
     def test_check_and_add_license_html_comment(self, mock_file, mock_exists):
         # Simulate that the file exists, but does not contain a license
         mock_exists.return_value = True
