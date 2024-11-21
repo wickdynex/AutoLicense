@@ -95,9 +95,11 @@ class LicenseManager:
 
     def is_license_present(self, content: str) -> bool:
         """
-        Check if the content of the first 50 lines contains an exact license-related keyword.
+        Check if the content of the first 50 lines contains an exact license-related keyword
+        and is preceded by a valid comment style (CommentStyle).
         :param content: The content of the file as a string
-        :return: True if any license-related keyword is found exactly (case-sensitive) in the first 50 lines, otherwise False
+        :return: True if any license-related keyword is found exactly (case-sensitive) in the first 50 lines,
+                 and the line starts with a valid comment style (otherwise False)
         """
         # Split content into lines
         lines = content.splitlines()
@@ -110,11 +112,16 @@ class LicenseManager:
             # Normalize the line by stripping leading/trailing spaces
             line = line.strip()
 
-            # Check if any of the license-related keywords (exact match, case-sensitive) is found in this line
-            for keyword in LicenseKeyword:
-                if keyword.value in line:  # Strictly check for exact keyword match (case-sensitive)
-                    return True
+            # Check for comment style in the line
+            if any(line.startswith(comment_style.value) for comment_style in CommentStyle):
+                # Split the line into words (based on spaces)
+                words_in_line = line.split()
 
+                # Check if any of the license-related keywords are present as exact matches
+                for keyword in LicenseKeyword:
+                    if keyword.value in words_in_line:
+                        return True
+        
         return False
 
     def get_file_type(self, file_extension: str) -> FileType:
