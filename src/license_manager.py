@@ -1,7 +1,7 @@
 import os
 from enum import Enum
 from datetime import datetime
-from license_generator import LicenseGenerator
+from src.license_generator import LicenseGenerator
 
 class CommentStyle(Enum):
     """ Enum to map file extensions to their respective comment styles. """
@@ -59,7 +59,7 @@ class LicenseManager:
         """
         # Check if the file exists
         if not os.path.exists(file_path):
-            self.print_log(f"Error: The file {file_path} does not exist.")
+            print(f"Error: The file {file_path} does not exist.")
             return
 
         # Check if the file already contains the license in the beginning (can be more sophisticated)

@@ -6,7 +6,6 @@ import sys
 from io import StringIO
 from datetime import datetime
 
-# 假设 LicenseArgConfig 类在 license_arg_config.py 中
 from src.license_arg_config import LicenseArgConfig
 
 class TestLicenseArgConfig(unittest.TestCase):
