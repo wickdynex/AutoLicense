@@ -188,5 +188,55 @@ class TestLicenseArgConfig(unittest.TestCase):
         self.config.parse()
         self.assertEqual(self.config.target_folder, "./data")
 
+    @patch("argparse.ArgumentParser.parse_args")  # Mock the parse_args method to simulate command-line input
+    @patch("os.path.isdir")  # Mock os.path.isdir to simulate directory existence check
+    def test_detail_flag(self, mock_isdir, mock_parse_args):
+        """Test that the --detail flag works correctly"""
+        
+        # Simulate command-line arguments with the --detail flag
+        mock_parse_args.return_value = MagicMock(
+            license_file="license.json",
+            license_type="MIT License",
+            start_year=2020,
+            author="John Doe",
+            end_year=2024,
+            target_folder='./output',
+            detail=True  # Simulate --detail being set to True
+        )
+        
+        # Simulate the behavior of os.path.isdir to return False (folder doesn't exist)
+        mock_isdir.return_value = True
+
+        # Parse the arguments
+        self.config.parse()
+        
+        # Check if the 'detail' flag is correctly set to True
+        self.assertTrue(self.config.detail, "Expected 'detail' to be True")
+
+    @patch("argparse.ArgumentParser.parse_args")  # Mock the parse_args method to simulate command-line input
+    @patch("os.path.isdir")  # Mock os.path.isdir to simulate directory existence check
+    def test_no_detail_flag(self, mock_isdir, mock_parse_args):
+        """Test that the --detail flag is not set, so the 'detail' flag is False"""
+        
+        # Simulate command-line arguments without the --detail flag
+        mock_parse_args.return_value = MagicMock(
+            license_file="license.json",
+            license_type="MIT License",
+            start_year=2020,
+            author="John Doe",
+            end_year=2024,
+            target_folder='./output',
+            detail=False  # Simulate --detail being absent (False)
+        )
+
+        # Simulate the behavior of os.path.isdir to return False (folder doesn't exist)
+        mock_isdir.return_value = True
+        
+        # Parse the arguments
+        self.config.parse()
+        
+        # Check if the 'detail' flag is correctly set to False
+        self.assertFalse(self.config.detail, "Expected 'detail' to be False")
+
 if __name__ == "__main__":
     unittest.main()
