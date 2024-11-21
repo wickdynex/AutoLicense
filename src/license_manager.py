@@ -88,7 +88,7 @@ class LicenseManager:
         with open(file_path, 'r') as file:
             content = file.read()
 
-            if self.is_license_present(content):
+            if self.is_license_present(content, file_type):
                 self.print_log(f"License already exists in {file_path}. No changes made.", level="INFO")
                 return
 
@@ -106,35 +106,64 @@ class LicenseManager:
 
         self.print_log(f"License added successfully to {file_path}.", level="INFO")
 
-    def is_license_present(self, content: str) -> bool:
+    def is_license_present(self, content: str, file_type: str) -> bool:
         """
-        Check if the content of the first 50 lines contains an exact license-related keyword
-        and is preceded by a valid comment style (CommentStyle).
+        Check if the content of the first 50 lines contains a valid comment block with a license-related keyword.
+        The comment block must be in the format specified by the file's type (e.g., /* */, <!-- -->).
+        
         :param content: The content of the file as a string
-        :return: True if any license-related keyword is found exactly (case-sensitive) in the first 50 lines,
-                 and the line starts with a valid comment style (otherwise False)
+        :param file_path: The path to the file (to check the file extension and determine comment style)
+        :return: True if a license-related keyword is found inside a valid comment block, False otherwise
         """
-        # Split content into lines
+        # Determine the comment style based on the file type
+        comment_style = file_type.comment_style.value
+
+        # Split the content into lines
         lines = content.splitlines()
 
         # Only consider the first 50 lines
         lines_to_check = lines[:50]
 
-        # Iterate through the first 50 lines
+        # Initialize a flag to check if we are inside a comment block
+        inside_comment_block = False
+        comment_block_lines = []
+
+        # Iterate through the first 50 lines to find the comment block
         for line in lines_to_check:
-            # Normalize the line by stripping leading/trailing spaces
-            line = line.strip()
+            line = line.strip()  # Strip leading/trailing spaces
 
-            # Check for comment style in the line
-            if any(line.startswith(comment_style.value) for comment_style in CommentStyle):
-                # Split the line into words (based on spaces)
-                words_in_line = line.split()
+            # Check for the start of the comment block
+            if comment_style == CommentStyle.SINGLE_LINE.value and line.startswith(comment_style):
+                # For single-line comments, we can check for keywords immediately
+                if any(keyword.value in line for keyword in LicenseKeyword):
+                    return True
+            elif comment_style == CommentStyle.MULTI_LINE.value:
+                # For multi-line comments, check for the start and end of the comment block
+                if line.startswith("/*"):
+                    inside_comment_block = True
+                    comment_block_lines.append(line)
+                elif line.endswith("*/") and inside_comment_block:
+                    comment_block_lines.append(line)
+                    break  # End of comment block found
+                elif inside_comment_block:
+                    comment_block_lines.append(line)
 
-                # Check if any of the license-related keywords are present as exact matches
-                for keyword in LicenseKeyword:
-                    if keyword.value in words_in_line:
-                        return True
-        
+            elif comment_style == CommentStyle.XML_HTML.value:
+                # For HTML/XML-style comments, check for the start and end of the comment block
+                if line.startswith("<!--"):
+                    inside_comment_block = True
+                    comment_block_lines.append(line)
+                elif line.endswith("-->") and inside_comment_block:
+                    comment_block_lines.append(line)
+                    break  # End of comment block found
+                elif inside_comment_block:
+                    comment_block_lines.append(line)
+
+        # After collecting the comment block lines, check if any of the lines contain license-related keywords
+        for comment_line in comment_block_lines:
+            if any(keyword.value in comment_line for keyword in LicenseKeyword):
+                return True
+
         return False
 
     def get_file_type(self, file_extension: str) -> FileType:
