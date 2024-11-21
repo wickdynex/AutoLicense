@@ -31,10 +31,11 @@ class FileType(Enum):
     HTML = ('.html', CommentStyle.XML_HTML)
     XML = ('.xml', CommentStyle.XML_HTML)
     MD = ('.md', CommentStyle.XML_HTML)
-    
+
     def __init__(self, extension, comment_style):
         self.extension = extension
         self.comment_style = comment_style
+
 
 class LicenseKeyword(Enum):
     """ Enum to store common keywords in license text """
@@ -59,7 +60,7 @@ class LicenseManager:
         """
         # Check if the file exists
         if not os.path.exists(file_path):
-            print(f"Error: The file {file_path} does not exist.")
+            self.print_log(f"The file {file_path} does not exist.", level="ERROR")
             return
 
         # Check if the file extension is valid (matches one of the defined file types)
@@ -67,7 +68,7 @@ class LicenseManager:
         file_type = self.get_file_type(file_extension)
         
         if not file_type:
-            self.print_log(f"Warning: File {file_path} with type {file_extension} not recognized, skipping...")
+            self.print_log(f"File {file_path} with type '{file_extension}' not recognized, skipping...", level="WARNING")
             return
         
         # Check if the file already contains the license in the beginning
@@ -75,7 +76,7 @@ class LicenseManager:
             content = file.read()
 
             if self.is_license_present(content):
-                self.print_log(f"License already exists in {file_path}. No changes made.")
+                self.print_log(f"License already exists in {file_path}. No changes made.", level="INFO")
                 return
 
         # Get the comment style associated with this file type
@@ -90,7 +91,7 @@ class LicenseManager:
             file.seek(0, 0)  # Move the file pointer to the beginning
             file.write(license_with_comment + "\n" + original_content)
 
-        self.print_log(f"License added successfully to {file_path}.")
+        self.print_log(f"License added successfully to {file_path}.", level="INFO")
 
     def is_license_present(self, content: str) -> bool:
         """
@@ -152,10 +153,10 @@ class LicenseManager:
         
         return full_license
 
-    def print_log(self, message: str):
-        """ Prints the log message only if the detail flag is set to True """
+    def print_log(self, message: str, level: str = "INFO"):
+        """ Prints the log message only if the detail flag is set to True, with log levels """
         if self.detail:
-            print(f"[INFO] {message}")
+            print(f"[{level}] {message}")
 
 
 # Main function to test LicenseManager and LicenseGenerator
@@ -200,6 +201,7 @@ if __name__ == "__main__":
         print(f"\nChecking and adding license to {file_path}...")
         license_manager.check_and_add_license(file_path)
 
+    # Disable detailed logs and run again
     license_manager.detail = False
 
     for file_path in file_paths:
