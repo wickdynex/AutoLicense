@@ -1,49 +1,53 @@
 # MIT License
-# 
+#
 # Copyright (c) 2024 - 2024 Wick Dynex
-# 
+#
 # Permission is hereby granted, free of charge,
 # to any person obtaining a copy of this software and associated documentation files (the 'Software'),
 # to deal in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software
 # and to permit persons to whom the Software is furnished to do so
-# 
+#
 # The above copyright notice
 # and this permission notice
 # shall be included in all copies or substantial portions of the Software.
 import os
-from enum import Enum
 from datetime import datetime
+from enum import Enum
+
 from src.license_generator import LicenseGenerator
 
+
 class CommentStyle(Enum):
-    """ Enum to map file extensions to their respective comment styles. """
+    """Enum to map file extensions to their respective comment styles."""
+
     SINGLE_LINE = "# "  # For single-line comments
     MULTI_LINE = "/* "  # For multi-line comments (start with /*, end with */)
     XML_HTML = "<!-- "  # For HTML/XML comments (start with <!--, end with -->)
 
+
 class FileType(Enum):
-    """ Enum to map file extensions to their respective comment styles. """
-    PYTHON = ('.py', CommentStyle.SINGLE_LINE)
-    SHELL = ('.sh', CommentStyle.SINGLE_LINE)
-    TEXT = ('.txt', CommentStyle.SINGLE_LINE)
-    RUBY = ('.rb', CommentStyle.SINGLE_LINE)
-    PERL = ('.pl', CommentStyle.SINGLE_LINE)
-    LUA = ('.lua', CommentStyle.SINGLE_LINE)
-    BASH = ('.bash', CommentStyle.SINGLE_LINE)
-    ZSH = ('.zsh', CommentStyle.SINGLE_LINE)
-    R = ('.r', CommentStyle.SINGLE_LINE)
-    TOML = ('.toml', CommentStyle.SINGLE_LINE)
-    YAML = ('.yml', CommentStyle.SINGLE_LINE)
-    JAVA = ('.java', CommentStyle.MULTI_LINE)
-    CPP = ('.cpp', CommentStyle.MULTI_LINE)
-    C = ('.c', CommentStyle.MULTI_LINE)
-    HEADER = ('.h', CommentStyle.MULTI_LINE)
-    JAVASCRIPT = ('.js', CommentStyle.MULTI_LINE)
-    CSS = ('.css', CommentStyle.MULTI_LINE)
-    HTML = ('.html', CommentStyle.XML_HTML)
-    XML = ('.xml', CommentStyle.XML_HTML)
-    MD = ('.md', CommentStyle.XML_HTML)
+    """Enum to map file extensions to their respective comment styles."""
+
+    PYTHON = (".py", CommentStyle.SINGLE_LINE)
+    SHELL = (".sh", CommentStyle.SINGLE_LINE)
+    RUBY = (".rb", CommentStyle.SINGLE_LINE)
+    PERL = (".pl", CommentStyle.SINGLE_LINE)
+    LUA = (".lua", CommentStyle.SINGLE_LINE)
+    BASH = (".bash", CommentStyle.SINGLE_LINE)
+    ZSH = (".zsh", CommentStyle.SINGLE_LINE)
+    R = (".r", CommentStyle.SINGLE_LINE)
+    TOML = (".toml", CommentStyle.SINGLE_LINE)
+    YAML = (".yml", CommentStyle.SINGLE_LINE)
+    JAVA = (".java", CommentStyle.MULTI_LINE)
+    CPP = (".cpp", CommentStyle.MULTI_LINE)
+    C = (".c", CommentStyle.MULTI_LINE)
+    HEADER = (".h", CommentStyle.MULTI_LINE)
+    JAVASCRIPT = (".js", CommentStyle.MULTI_LINE)
+    CSS = (".css", CommentStyle.MULTI_LINE)
+    HTML = (".html", CommentStyle.XML_HTML)
+    XML = (".xml", CommentStyle.XML_HTML)
+    MD = (".md", CommentStyle.XML_HTML)
 
     def __init__(self, extension, comment_style):
         self.extension = extension
@@ -51,10 +55,12 @@ class FileType(Enum):
 
 
 class LicenseKeyword(Enum):
-    """ Enum to store common keywords in license text """
+    """Enum to store common keywords in license text"""
+
     COPYRIGHT = "Copyright"
     LICENSE = "License"
     YEAR = str(datetime.now().year)  # Get the current year dynamically
+
 
 class LicenseManager:
     def __init__(self, license_text: str, detail: bool = False):
@@ -64,7 +70,7 @@ class LicenseManager:
         :param detail: A flag to control whether detailed logs should be printed
         """
         self.license_text = license_text
-        self.detail = detail  
+        self.detail = detail
 
     def check_and_add_license(self, file_path: str):
         """
@@ -76,20 +82,27 @@ class LicenseManager:
             self.print_log(f"The file {file_path} does not exist.", level="ERROR")
             return
 
-        # Check if the file extension is valid (matches one of the defined file types)
+        # Check if the file extension is valid (matches one of the defined file
+        # types)
         file_extension = os.path.splitext(file_path)[1]
         file_type = self.get_file_type(file_extension)
-        
+
         if not file_type:
-            self.print_log(f"File {file_path} with type '{file_extension}' not recognized, skipping...", level="WARNING")
+            self.print_log(
+                f"File {file_path} with type '{file_extension}' not recognized, skipping...",
+                level="WARNING",
+            )
             return
-        
+
         # Check if the file already contains the license in the beginning
-        with open(file_path, 'r') as file:
+        with open(file_path, "r") as file:
             content = file.read()
 
             if self.is_license_present(content, file_type):
-                self.print_log(f"License already exists in {file_path}. No changes made.", level="INFO")
+                self.print_log(
+                    f"License already exists in {file_path}. No changes made.",
+                    level="INFO",
+                )
                 return
 
         # Get the comment style associated with this file type
@@ -99,7 +112,7 @@ class LicenseManager:
         license_with_comment = self.format_license_with_comments(comment_style)
 
         # Add the formatted license text at the beginning of the file
-        with open(file_path, 'r+') as file:
+        with open(file_path, "r+") as file:
             original_content = file.read()
             file.seek(0, 0)  # Move the file pointer to the beginning
             file.write(license_with_comment + "\n" + original_content)
@@ -110,7 +123,7 @@ class LicenseManager:
         """
         Check if the content of the first 50 lines contains a valid comment block with a license-related keyword.
         The comment block must be in the format specified by the file's type (e.g., /* */, <!-- -->).
-        
+
         :param content: The content of the file as a string
         :param file_path: The path to the file (to check the file extension and determine comment style)
         :return: True if a license-related keyword is found inside a valid comment block, False otherwise
@@ -133,12 +146,16 @@ class LicenseManager:
             line = line.strip()  # Strip leading/trailing spaces
 
             # Check for the start of the comment block
-            if comment_style == CommentStyle.SINGLE_LINE.value and line.startswith(comment_style):
-                # For single-line comments, we can check for keywords immediately
+            if comment_style == CommentStyle.SINGLE_LINE.value and line.startswith(
+                comment_style
+            ):
+                # For single-line comments, we can check for keywords
+                # immediately
                 if any(keyword.value in line for keyword in LicenseKeyword):
                     return True
             elif comment_style == CommentStyle.MULTI_LINE.value:
-                # For multi-line comments, check for the start and end of the comment block
+                # For multi-line comments, check for the start and end of the
+                # comment block
                 if line.startswith("/*"):
                     inside_comment_block = True
                     comment_block_lines.append(line)
@@ -149,7 +166,8 @@ class LicenseManager:
                     comment_block_lines.append(line)
 
             elif comment_style == CommentStyle.XML_HTML.value:
-                # For HTML/XML-style comments, check for the start and end of the comment block
+                # For HTML/XML-style comments, check for the start and end of
+                # the comment block
                 if line.startswith("<!--"):
                     inside_comment_block = True
                     comment_block_lines.append(line)
@@ -159,7 +177,8 @@ class LicenseManager:
                 elif inside_comment_block:
                     comment_block_lines.append(line)
 
-        # After collecting the comment block lines, check if any of the lines contain license-related keywords
+        # After collecting the comment block lines, check if any of the lines
+        # contain license-related keywords
         for comment_line in comment_block_lines:
             if any(keyword.value in comment_line for keyword in LicenseKeyword):
                 return True
@@ -183,7 +202,7 @@ class LicenseManager:
         formatted_lines = []
 
         if comment_style == CommentStyle.SINGLE_LINE.value:
-            # Single-line comment style: start each line with '#' 
+            # Single-line comment style: start each line with '#'
             full_license = "\n".join([f"{comment_style}{line}" for line in lines])
         elif comment_style == CommentStyle.MULTI_LINE.value:
             # Multi-line comment style: start with '/*' and end with '*/'
@@ -199,11 +218,11 @@ class LicenseManager:
                 formatted_lines.append(f" {line}")
             formatted_lines.append("-->")
             full_license = "\n".join(formatted_lines)
-        
+
         return full_license
 
     def print_log(self, message: str, level: str = "INFO"):
-        """ Prints the log message only if the detail flag is set to True, with log levels """
+        """Prints the log message only if the detail flag is set to True, with log levels"""
         if self.detail:
             print(f"[{level}] {message}")
 
@@ -212,37 +231,39 @@ class LicenseManager:
 if __name__ == "__main__":
     # Use LicenseGenerator to generate the license text
     license_generator = LicenseGenerator(
-        license_file="data/license.json",  # Assume license.json is located in the data folder
+        license_file="data/license.json",
+        # Assume license.json is located in the data folder
         license_type="MIT License",
         start_year=2015,
         end_year=datetime.now().year,  # Use current year dynamically
-        author="Microsoft Corporation"
+        author="Microsoft Corporation",
     )
 
     # Generate the license text
     license_text = license_generator.generate_license()
 
-    # Create a LicenseManager instance with the generated license text and detail flag set to True
+    # Create a LicenseManager instance with the generated license text and
+    # detail flag set to True
     license_manager = LicenseManager(license_text, detail=True)
 
     # Test with various file paths in /test/testfile/
     file_paths = [
-        "test/testfile/test.cpp",   # Test with .cpp file
+        "test/testfile/test.cpp",  # Test with .cpp file
         "test/testfile/test.java",  # Test with .java file
-        "test/testfile/test.py",    # Test with .py file
-        "test/testfile/test.txt",   # Test with .txt file
+        "test/testfile/test.py",  # Test with .py file
+        "test/testfile/test.txt",  # Test with .txt file
         "test/testfile/test.html",  # Test with .html file
-        "test/testfile/test.c",     # Test with .c file
-        "test/testfile/test.r",     # Test with .r file
-        "test/testfile/test.js",    # Test with .js file
-        "test/testfile/test.sh",    # Test with .sh file
-        "test/testfile/test.css",   # Test with .css file
-        "test/testfile/test.h",     # Test with .h file
-        "test/testfile/test.xml",   # Test with .xml file
-        "test/testfile/test.md",    # Test with .md file
+        "test/testfile/test.c",  # Test with .c file
+        "test/testfile/test.r",  # Test with .r file
+        "test/testfile/test.js",  # Test with .js file
+        "test/testfile/test.sh",  # Test with .sh file
+        "test/testfile/test.css",  # Test with .css file
+        "test/testfile/test.h",  # Test with .h file
+        "test/testfile/test.xml",  # Test with .xml file
+        "test/testfile/test.md",  # Test with .md file
         "test/testfile/test.json",  # Test with .json file
-        "test/testfile/test.yml",   # Test with .yml file
-        "test/testfile/test.toml"   # Test with .toml file
+        "test/testfile/test.yml",  # Test with .yml file
+        "test/testfile/test.toml",  # Test with .toml file
     ]
 
     # Iterate through each file and add the license
