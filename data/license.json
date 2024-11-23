@@ -34,6 +34,31 @@
         "See the License for the specific language governing permissions and",
         "limitations under the License."
       ]
+    },
+    "GNU General Public License v3.0": {
+      "copyright": [
+        "Copyright (C) {start_year} {author}"
+      ],
+      "permissions": [
+        "You may copy, modify, distribute, and sublicense the Software, provided that you meet the requirements of this License."
+      ],
+      "conditions": [
+        "You must ensure that source code is made available to others under the same GPLv3 license.",
+        "You must also include a copy of the GPLv3 License with any distribution of the Software."
+      ]
+    },
+    "BSD 3-Clause License": {
+      "copyright": [
+        "Copyright (c) {start_year} - {end_year} {author}"
+      ],
+      "permissions": [
+        "Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:"
+      ],
+      "conditions": [
+        "1. Redistributions of source code must retain the above copyright notice, this list of conditions, and the following disclaimer.",
+        "2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions, and the following disclaimer in the documentation or other materials provided with the distribution.",
+        "3. Neither the name of the {author} nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission."
+      ]
     }
   }
 }
