@@ -1,0 +1,38 @@
+name: Run Tests with unittest
+
+on:
+  push:
+    branches:
+      - main  
+    paths:
+      - 'src/**'
+      - 'test/**'
+
+  pull_request:
+    branches:
+      - main  
+    paths:
+      - 'src/**'
+      - 'test/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest  
+    strategy:
+      matrix:
+        python-version: ["3.13"]
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+
+    - name: Run tests with unittest  
+      run: |
+        python -m unittest discover -s test 
