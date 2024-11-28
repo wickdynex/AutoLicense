@@ -3,7 +3,8 @@
 # Copyright (c) 2024 - 2024 Wick Dynex
 #
 # Permission is hereby granted, free of charge,
-# to any person obtaining a copy of this software and associated documentation files (the 'Software'),
+# to any person obtaining a copy of this software and associated documentation files
+# (the 'Software'),
 # to deal in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software
 # and to permit persons to whom the Software is furnished to do so
@@ -11,6 +12,23 @@
 # The above copyright notice
 # and this permission notice
 # shall be included in all copies or substantial portions of the Software.
+"""
+Unit tests for the LicenseManager class in the 'src.license_manager' module.
+
+This module contains test cases for the LicenseManager class, which is responsible
+for managing license headers in source code files. The tests cover various methods
+and functionalities, such as checking if a license file exists, adding a license to
+files, and verifying if a license is present in a file's content.
+
+Tested functionalities include:
+- Checking and adding licenses to files that do or do not exist.
+- Handling files with different extensions and formats (e.g., .cpp, .html).
+- Verifying the presence of a license in a file's content.
+- Formatting licenses with different comment styles (single-line, multi-line, XML/HTML).
+
+Modules tested:
+- `LicenseManager`
+"""
 import unittest
 from datetime import datetime
 from unittest.mock import mock_open, patch
@@ -83,7 +101,27 @@ class TestLicenseManager(unittest.TestCase):
             )  # HTML comments should end with '-->'
 
     def test_is_license_present(self):
-        license_text = "/* MIT License\n * \n * Copyright (c) 2024 - 2024 Wick Dynex\n * \n * Permission is hereby granted, free of charge,\n * to any person obtaining a copy of this software and associated documentation files (the 'Software'),\n * to deal in the Software without restriction, including without limitation the rights\n * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software\n * and to permit persons to whom the Software is furnished to do so\n * \n * The above copyright notice\n * and this permission notice\n * shall be included in all copies or substantial portions of the Software.\n */"
+        license_text = (
+            "/* MIT License\n"
+            " * \n"
+            " * Copyright (c) 2024 - 2024 Wick Dynex\n"
+            " * \n"
+            " * Permission is hereby granted, free of charge,\n"
+            " * to any person obtaining a copy of this software\n"
+            " * and associated documentation files (the 'Software'),\n"
+            " * to deal in the Software without restriction,\n"
+            " * including without limitation the rights to use,\n"
+            " * copy, modify, merge, publish, distribute,\n"
+            " * sublicense, and/or sell copies of the Software\n"
+            " * and to permit persons to whom the Software is\n"
+            " * furnished to do so\n"
+            " * \n"
+            " * The above copyright notice\n"
+            " * and this permission notice\n"
+            " * shall be included in all copies or substantial\n"
+            " * portions of the Software.\n"
+            " */"
+        )
 
         license_manager = LicenseManager(license_text, detail=True)
 
