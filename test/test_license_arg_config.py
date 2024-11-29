@@ -40,7 +40,7 @@ def config_instance():
 # Test valid argument parsing
 @patch("sys.exit")
 @patch("argparse.ArgumentParser.parse_args")
-def test_parse_valid_args(mock_parse_args,mock_exit, config_instance):
+def test_parse_valid_args(mock_parse_args, mock_exit, config_instance):
     """Test that valid command-line arguments are parsed correctly."""
     mock_parse_args.return_value = MagicMock(
         license_file="license.json",
