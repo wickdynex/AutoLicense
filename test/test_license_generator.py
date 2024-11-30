@@ -63,13 +63,12 @@ def license_data():
                     "You may use the Software in compliance with the License."
                 ],
                 "conditions": [
-                    "You must include a copy of the License " + 
-                    "in any distribution of the Software."
+                    "You must include a copy of the License "
+                    + "in any distribution of the Software."
                 ],
             },
         }
     }
-
 
 
 def test_generate_license_mit(license_data):
