@@ -5,15 +5,24 @@ title: "[BUG FIX] "
 labels: bug, help wanted
 assignees: ''
 ---
+### Describe the bug  
 
-**Describe the bug**
 A clear and concise description of the bug you're proposing a fix for.
 
-**Steps to reproduce**
+---
+
+### Steps to reproduce  
+
 Steps to reproduce the bug.
 
-**Proposed fix**
+---
+
+### Proposed fix  
+
 Provide details or code snippets of how the bug can be fixed.
 
-**Additional context**
+---
+
+### Additional context  
+
 Any additional information that can help in fixing the bug.
