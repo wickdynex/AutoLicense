@@ -26,9 +26,7 @@ already present. If not, it adds the appropriate license header.
 Usage:
     Call this function to automate license header management for project files.
 """
-
 import os
-
 from src.license_arg_config import LicenseArgConfig
 from src.license_generator import LicenseGenerator
 from src.license_manager import LicenseManager
@@ -54,7 +52,6 @@ def auto_license():
         for file_name in files:
             file_path = os.path.join(root, file_name)
             license_manager.check_and_add_license(file_path)
-
 
 if __name__ == "__main__":
     auto_license()
