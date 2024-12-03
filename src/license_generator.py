@@ -16,7 +16,6 @@ import sys
 from datetime import datetime
 from typing import Optional
 
-
 class LicenseGenerator:
     def __init__(
         self,
@@ -102,7 +101,6 @@ class LicenseGenerator:
         license_text = f"{
             self.license_type}\n\n{copyright_text}\n\n{permissions_text}\n\n{conditions_text}"
         return license_text
-
 
 # Main section where LicenseGenerator is used
 if __name__ == "__main__":

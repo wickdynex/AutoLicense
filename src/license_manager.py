@@ -14,9 +14,7 @@
 import os
 from datetime import datetime
 from enum import Enum
-
 from src.license_generator import LicenseGenerator
-
 
 class CommentStyle(Enum):
     """Enum to map file extensions to their respective comment styles."""
