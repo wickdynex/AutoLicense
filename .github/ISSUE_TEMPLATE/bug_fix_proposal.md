@@ -9,6 +9,7 @@ assignees: ''
 ### Describe the bug
 
 Provide a clear and concise description of the bug you're proposing a fix for. Include any relevant details such as:
+
 - What the expected behavior is.
 - What the actual behavior is.
 - When the bug occurs (e.g., on specific actions, after certain events, or during particular conditions).
@@ -20,16 +21,18 @@ Provide a clear and concise description of the bug you're proposing a fix for. I
 ### Steps to reproduce
 
 List the steps necessary to reproduce the bug. Please provide as much detail as possible so that others can easily reproduce the issue.
+
 1. Step 1: [Description of the first step]
 2. Step 2: [Description of the second step]
 3. Step 3: [Description of the third step]
 4. ...
-   
+
 ---
 
 ### Proposed fix
 
 Provide a detailed explanation or code snippets that outline how the bug can be fixed. Include the following if applicable:
+
 - Which files or components need to be modified.
 - Any changes to data models, API endpoints, or user interface.
 - A step-by-step guide to apply the fix.
@@ -41,6 +44,7 @@ Provide a detailed explanation or code snippets that outline how the bug can be 
 ### Additional context
 
 Any additional information that might be useful in resolving the bug. This could include:
+
 - Screenshots or videos illustrating the bug.
 - Related issues or pull requests.
 - If this bug might be related to any recent changes in the codebase.
@@ -53,6 +57,7 @@ Any additional information that might be useful in resolving the bug. This could
 ### Checklist
 
 Before submitting the fix proposal, ensure that:
+
 - [ ] The bug is described clearly and reproducible.
 - [ ] The proposed fix is complete and includes necessary code changes.
 - [ ] The issue can be replicated in a clean environment.
