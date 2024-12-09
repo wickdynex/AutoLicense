@@ -16,7 +16,6 @@ import os
 import sys
 from datetime import datetime
 
-
 class LicenseArgConfig:
     def __init__(self):
         """
@@ -41,7 +40,9 @@ class LicenseArgConfig:
 
         # Required arguments
         parser.add_argument(
-            "--license-file", required=True, help="Path to the license file"
+            "--license-file", 
+            default="data/license.json",  # Set default value for license file
+            help="Path to the license file (default: data/license.json)"
         )
         parser.add_argument(
             "--license-type",
@@ -103,30 +104,25 @@ class LicenseArgConfig:
         # Check if start year is less than or equal to end year
         if args.end_year is not None and args.start_year > args.end_year:
             self._handle_error(
-                f"Start year {
-                    args.start_year} cannot be greater than end year {
-                    args.end_year}."
+                f"Start year {args.start_year} cannot be greater than end year {args.end_year}."
             )
 
         # Check if end year is in the future
         if args.end_year is not None and args.end_year > current_year:
             self._handle_error(
-                f"End year {
-                    args.end_year} cannot be in the future. Current year is {current_year}."
+                f"End year {args.end_year} cannot be in the future. Current year is {current_year}."
             )
 
         # Check if target folder exists
         if not os.path.isdir(args.target_folder):
             self._handle_error(
-                f"Target folder '{
-                    args.target_folder}' does not exist."
+                f"Target folder '{args.target_folder}' does not exist."
             )
 
         # Check if the target folder is writable
         if not os.access(args.target_folder, os.W_OK):
             self._handle_error(
-                f"Target folder '{
-                    args.target_folder}' is not writable. Please ensure you have write permissions."
+                f"Target folder '{args.target_folder}' is not writable. Please ensure you have write permissions."
             )
 
     def _handle_error(self, message: str):
