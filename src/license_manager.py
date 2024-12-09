@@ -23,7 +23,6 @@ class CommentStyle(Enum):
     MULTI_LINE = "/* "  # For multi-line comments (start with /*, end with */)
     XML_HTML = "<!-- "  # For HTML/XML comments (start with <!--, end with -->)
 
-
 class FileType(Enum):
     """Enum to map file extensions to their respective comment styles."""
 
@@ -58,7 +57,6 @@ class LicenseKeyword(Enum):
     COPYRIGHT = "Copyright"
     LICENSE = "License"
     YEAR = str(datetime.now().year)  # Get the current year dynamically
-
 
 class LicenseManager:
     def __init__(self, license_text: str, detail: bool = False):
@@ -223,7 +221,6 @@ class LicenseManager:
         """Prints the log message only if the detail flag is set to True, with log levels"""
         if self.detail:
             print(f"[{level}] {message}")
-
 
 # Main function to test LicenseManager and LicenseGenerator
 if __name__ == "__main__":
