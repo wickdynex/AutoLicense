@@ -16,7 +16,6 @@ import os
 import sys
 from datetime import datetime
 
-
 class LicenseArgConfig:
     def __init__(self):
         """
@@ -146,7 +145,6 @@ class LicenseArgConfig:
         print(f"Author: {self.author}")
         print(f"Target folder: {self.target_folder}")
         print(f"Show details: {self.detail}")
-
 
 def main():
     # Create LicenseArgConfig instance
