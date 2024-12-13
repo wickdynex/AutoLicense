@@ -3,7 +3,8 @@
 # Copyright (c) 2024 - 2024 Wick Dynex
 #
 # Permission is hereby granted, free of charge,
-# to any person obtaining a copy of this software and associated documentation files (the 'Software'),
+# to any person obtaining a copy of this software and associated documentation files 
+# (the 'Software'),
 # to deal in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software
 # and to permit persons to whom the Software is furnished to do so
@@ -70,7 +71,8 @@ class LicenseManager:
 
     def check_and_add_license(self, file_path: str):
         """
-        Check if the file extension is supported, then check if it already contains a license. If not, add the license.
+        Check if the file extension is supported, then check if it already contains a license. 
+        If not, add the license.
         :param file_path: The path to the file where the license should be added
         """
         # Check if the file exists
@@ -117,12 +119,15 @@ class LicenseManager:
 
     def is_license_present(self, content: str, file_type: str) -> bool:
         """
-        Check if the content of the first 50 lines contains a valid comment block with a license-related keyword.
-        The comment block must be in the format specified by the file's type (e.g., /* */, <!-- -->).
+        Check if the content of the first 50 lines contains a valid comment block 
+        with a license-related keyword.
+        The comment block must be in the format specified by 
+        the file's type (e.g., /* */, <!-- -->).
 
         :param content: The content of the file as a string
-        :param file_path: The path to the file (to check the file extension and determine comment style)
-        :return: True if a license-related keyword is found inside a valid comment block, False otherwise
+        :param file_path: The path to the file (check file extension, determine comment style)
+        :return: True if a license-related keyword is found inside a valid comment block,
+            False otherwise
         """
         # Determine the comment style based on the file type
         comment_style = file_type.comment_style.value
