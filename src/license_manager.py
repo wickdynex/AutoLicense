@@ -3,7 +3,7 @@
 # Copyright (c) 2024 - 2024 Wick Dynex
 #
 # Permission is hereby granted, free of charge,
-# to any person obtaining a copy of this software and associated documentation files 
+# to any person obtaining a copy of this software and associated documentation files
 # (the 'Software'),
 # to deal in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software
@@ -240,11 +240,11 @@ if __name__ == "__main__":
     )
 
     # Generate the license text
-    license_text = license_generator.generate_license()
+    LICENSE_TEXT = license_generator.generate_license()
 
     # Create a LicenseManager instance with the generated license text and
     # detail flag set to True
-    license_manager = LicenseManager(license_text, detail=True)
+    license_manager = LicenseManager(LICENSE_TEXT, detail=True)
 
     # Test with various file paths in /test/testfile/
     file_paths = [
@@ -267,13 +267,13 @@ if __name__ == "__main__":
     ]
 
     # Iterate through each file and add the license
-    for file_path in file_paths:
-        print(f"\nChecking and adding license to {file_path}...")
-        license_manager.check_and_add_license(file_path)
+    for path in file_paths:
+        print(f"\nChecking and adding license to {path}...")
+        license_manager.check_and_add_license(path)
 
     # Disable detailed logs and run again
     license_manager.detail = False
 
-    for file_path in file_paths:
-        print(f"\nChecking and adding license to {file_path}...")
-        license_manager.check_and_add_license(file_path)
+    for path in file_paths:
+        print(f"\nChecking and adding license to {path}...")
+        license_manager.check_and_add_license(path)
