@@ -60,6 +60,58 @@ def test_parse_valid_args(mock_parse_args, mock_exit, config_instance):
     assert config_instance.end_year == 2024
     assert config_instance.target_folder == "./output"
 
+# Test case for --license-file argument
+@patch("sys.exit")
+@patch("argparse.ArgumentParser.parse_args")
+def test_parse_license_file(mock_parse_args, mock_exit, config_instance):
+    """Test that the --license-file argument is parsed correctly."""
+
+    # Mock the command-line arguments
+    mock_parse_args.return_value = MagicMock(
+        license_file="data/license.json",
+        license_type="MIT License",
+        start_year=2020,
+        author="John Doe",
+        end_year=2024,
+        target_folder="./output",
+    )
+
+    # Parse arguments
+    config_instance.parse()
+
+    # Assert that the license_file is correctly set
+    assert config_instance.license_file == "data/license.json"
+    assert config_instance.license_type == "MIT License"
+    assert config_instance.start_year == 2020
+    assert config_instance.author == "John Doe"
+    assert config_instance.end_year == 2024
+    assert config_instance.target_folder == "./output"
+
+# Test case for --license-file argument with default value
+def test_parse_license_file_default(monkeypatch, config_instance):
+    """Test that the --license-file argument uses the default value when not provided."""
+
+    # Simulate command-line arguments using monkeypatch
+    # This simulates running the script with no --license-file argument
+    monkeypatch.setattr('sys.argv', [
+        'script_name',  # The script name (can be anything)
+        '--license-type', 'MIT License',
+        '--start-year', '2020',
+        '--author', 'John Doe',
+        '--end-year', '2024',
+        '--target-folder', '.'
+    ])
+
+    # Parse arguments
+    config_instance.parse()
+
+    # Assert that the license_file uses the default value
+    assert config_instance.license_file == "data/license.json"
+    assert config_instance.license_type == "MIT License"
+    assert config_instance.start_year == 2020
+    assert config_instance.author == "John Doe"
+    assert config_instance.end_year == 2024
+    assert config_instance.target_folder == "."
 
 # Test invalid start year > end year
 @patch("sys.exit")
