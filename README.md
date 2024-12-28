@@ -15,6 +15,8 @@
 -->
 # AutoLicense
 
+> Language: [中文 README](README_zh.md)
+
 a python tool to automatically add license headers to source files in a target directory. it generates the license header based on user-specified parameters, formats it according to file type, and only adds it if missing.
 
 ## Features
