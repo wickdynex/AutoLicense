@@ -31,6 +31,58 @@ a python tool to automatically add license headers to source files in a target d
 
 - Python 3.x
 
+## Download
+
+### Get the Tool Version(Excluding Irrelevant Files)
+
+#### Option 1: Manual Download and Extraction
+
+If you prefer to manually download and extract the release files, you can download the AutoLicense release version from the following link:
+
+- [AutoLicense Release Version](https://github.com/wickdynex/AutoLicense/releases/tag/v0.1.0-demo)
+
+#### Option 2: Via Command Line
+
+You can use the following commands to download and extract the corresponding file:
+
+- **Download `tar.gz` file:**
+
+  ##### step1
+
+  ```bash
+  curl -L -o AutoLicense-v0.1.0-demo.tar.gz https://github.com/wickdynex/AutoLicense/releases/download/v0.1.0-demo/AutoLicense-v0.1.0-demo.tar.gz
+  ```
+
+  ##### step2
+
+  ```bash
+  tar -xzvf AutoLicense-v0.1.0-demo.tar.gz
+  ```
+
+- **Download `zip` file:**
+
+  - step1
+
+  ```bash
+  curl -L -o AutoLicense-v0.1.0-demo.zip https://github.com/wickdynex/AutoLicense/releases/download/v0.1.0-demo/AutoLicense-v0.1.0-demo.zip
+  ```
+
+  - step2
+
+  ```bash
+  unzip AutoLicense-v0.1.0-demo.zip
+  ```
+
+### Get All Source Code (Further Development)
+
+If you want to get the complete source code for further development or customization, you can clone the project via `Git`:
+
+```bash
+git clone https://github.com/wickdynex/AutoLicense.git
+```
+
+You can then modify the code locally for customization or contribute to the project.
+
 ## Usage
 
 Run the script with the following command to add license headers to all supported files in a target folder:
