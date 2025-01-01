@@ -25,6 +25,58 @@
 
 - Python 3.x
 
+## 下载
+
+### 获取工具版本（不包含项目无关文件）
+
+#### 方式 1：手动下载和解压
+
+如果你更倾向于手动下载和解压发布文件，可以从以下链接下载 AutoLicense 发布版本：
+
+- [AutoLicense 发布版本](https://github.com/wickdynex/AutoLicense/releases/tag/v0.1.0-demo)
+
+#### 方式 2：通过命令行获取
+
+你可以使用以下命令下载并解压相应的文件：
+
+- **下载 `tar.gz` 文件：**
+
+  ##### 步骤 1
+
+  ```bash
+  curl -L -o AutoLicense-v0.1.0-demo.tar.gz https://github.com/wickdynex/AutoLicense/releases/download/v0.1.0-demo/AutoLicense-v0.1.0-demo.tar.gz
+  ```
+
+  ##### 步骤 2
+
+  ```bash
+  tar -xzvf AutoLicense-v0.1.0-demo.tar.gz
+  ```
+
+- **下载 `zip` 文件：**
+
+  ##### 步骤 1
+
+  ```bash
+  curl -L -o AutoLicense-v0.1.0-demo.zip https://github.com/wickdynex/AutoLicense/releases/download/v0.1.0-demo/AutoLicense-v0.1.0-demo.zip
+  ```
+
+  ##### 步骤 2
+
+  ```bash
+  unzip AutoLicense-v0.1.0-demo.zip
+  ```
+
+### 获取全部源代码（二次开发）
+
+如果你想获取完整的源代码以便进行进一步开发或自定义，可以通过 `Git` 克隆该项目：
+
+```bash
+git clone https://github.com/wickdynex/AutoLicense.git
+```
+
+然后，你可以在本地修改代码，进行自定义开发或为项目做贡献。
+
 ## 使用方法
 
 运行以下命令将许可头添加到目标文件夹中的所有支持文件：
