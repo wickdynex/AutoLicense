@@ -61,13 +61,13 @@ You can use the following commands to download and extract the corresponding fil
 
 - **Download `zip` file:**
 
-  - step1
+  ##### step1
 
   ```bash
   curl -L -o AutoLicense-v0.1.0-demo.zip https://github.com/wickdynex/AutoLicense/releases/download/v0.1.0-demo/AutoLicense-v0.1.0-demo.zip
   ```
 
-  - step2
+  ##### step2
 
   ```bash
   unzip AutoLicense-v0.1.0-demo.zip
